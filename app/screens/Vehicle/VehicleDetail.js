@@ -60,6 +60,7 @@ const VehicleDetail = (props) => {
   const [loading, setLoading] = useState(true);
   const [hasError, setErrors] = useState(false);
   const [plateNo, setPlateNo] = useState('');
+  const [slotNo, setSlotNo] = useState('');
 
   const [select, setSelectec] = useState();
   const [refreshing, setRefreshing] = useState(false);
@@ -106,6 +107,12 @@ const VehicleDetail = (props) => {
     setPlateNo(index);
   };
 
+  const valueSlotNo = (index) => {
+    // console.log('name', index);
+
+    setSlotNo(index);
+  };
+
   const fetchSession = () => {
       const params = {
           check_id : dataprops.check_id,
@@ -138,6 +145,7 @@ const VehicleDetail = (props) => {
     bodyData.append('check_id', dataprops.check_id);
     bodyData.append('userid', dataprops.userid);
     bodyData.append('plateno', plateNo);
+    bodyData.append('slotno', slotNo);
     bodyData.append('tower_cd', dataprops.tower_cd);
     bodyData.append('location', dataprops.location);
     bodyData.append('check_date', dataprops.check_date);
@@ -160,10 +168,12 @@ const VehicleDetail = (props) => {
                     console.log('resJsonCallback', resJson);
                     navigation.navigate('VehicleCheck', resJson.Data);
                     setPlateNo('');
+                    setSlotNo('');
                   } else {
                     alert(resJson.Pesan);
                     console.log('ERROR',resJson);
                     setPlateNo('');
+                    setSlotNo('');
                   }
                 });
                 
@@ -175,7 +185,7 @@ const VehicleDetail = (props) => {
       });
   };
 
-  const onEdit = (item) => {
+  const onEdit = (item, slot) => {
     // console.log('PLAT',item); return;
     const bodyData = new FormData();
     bodyData.append('entity_cd', dataprops.entity_cd);
@@ -183,9 +193,11 @@ const VehicleDetail = (props) => {
     bodyData.append('check_id', dataprops.check_id);
     bodyData.append('userid', dataprops.userid);
     bodyData.append('plateno', item);
+    bodyData.append('slotno', slot);
     bodyData.append('tower_cd', dataprops.tower_cd);
     bodyData.append('location', dataprops.location);
     bodyData.append('check_date', dataprops.check_date);
+    bodyData.append('status', dataprops.status);
 
     console.log('liatbody', bodyData);  
 
@@ -338,11 +350,11 @@ const VehicleDetail = (props) => {
               ]}>
           <Button
            full
-           disabled={dataprops.status == 'C' ? true : false}
+           disabled={props.route.params.status == 'C' ? true : false}
             onPress={() => {
               setIsModalVisible(() => !isModalVisible);
             }}
-            style={{backgroundColor: dataprops.status == 'C' ? '#8D8D8D' : '#1384CA'  }}
+            style={{backgroundColor: props.route.params.status == 'C' ? '#8D8D8D' : '#1384CA'  }}
             >
             {t('Add Vehicle Check')}
           </Button>
@@ -358,13 +370,21 @@ const VehicleDetail = (props) => {
             >
               <View style={styled.centeredView}>
                 <View style={styled.modalView}>
-                  <Text style={styled.modalText}>Please input Vehicle Police No.</Text>
+                  <Text style={styled.modalText}>Please input Police No and Slot No</Text>
                   <TextInput
                     style={{ width: '70%', marginBottom: 15 }}
                     autoCorrect={false}
                     placeholder={t('Nomor Plat')}
                     value={plateNo}
                     onChangeText={valuePlateNo}
+                    textAlign='center'
+                  />
+                  <TextInput
+                    style={{ width: '70%', marginBottom: 15 }}
+                    autoCorrect={false}
+                    placeholder={t('Nomor Slot')}
+                    value={slotNo}
+                    onChangeText={valueSlotNo}
                     textAlign='center'
                   />
                   <Pressable
@@ -393,7 +413,7 @@ const VehicleDetail = (props) => {
                   return (
                       <View style={{borderBottomWidth: 1, borderBottomColor: '#000'}}> 
                       <TouchableOpacity  style={[styless.container]} 
-                       onPress={() => {onEdit(item.plate_no)}}
+                       onPress={() => {onEdit(item.plate_no, item.slot)}}
                       >
                           <View style={[styless.image, { backgroundColor: colors.primaryLight }]}>
                               <Icon name='car' size={24} solid color={BaseColor.whiteColor} />

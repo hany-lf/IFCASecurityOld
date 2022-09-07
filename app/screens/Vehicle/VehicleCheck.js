@@ -56,10 +56,10 @@ import {
     const { t } = useTranslation();
     const [loading, setLoading] = useState(true);
     const [hasError, setErrors] = useState(false);
-    const [plateNo, setPlateNo] = useState(dataprops.plateno);
-    const [cartype, setCarType] = useState(dataprops.type);
-    const [colour, setColour] = useState(dataprops.colour);
-    const [slot, setSlot] = useState(dataprops.slot);
+    const [plateNo, setPlateNo] = useState(props.route.params.plateno);
+    const [cartype, setCarType] = useState(props.route.params.type);
+    const [colour, setColour] = useState(props.route.params.colour);
+    const [slot, setSlot] = useState(props.route.params.slot);
     const [remark, setRemark] = useState('');
     const [sticker, setSticker] = useState('');
     const [velg, setVelg] = useState('');
@@ -70,14 +70,32 @@ import {
     const [kaca, setKaca] = useState('');
     const [pintu, setPintu] = useState('');
     const [banserep, setBanSerep] = useState('');
+    const [fileList, setFileList] = useState([]);
+    const state = useMemo(() => ({ fileList }), [fileList]);
 
   
     const [refreshing, setRefreshing] = useState(false);
   
   
     useEffect(() => {
-      console.log('HELLOO');
-    }, []);
+      
+      setPlateNo(props.route.params.plateno);
+      setCarType(props.route.params.type);
+      setColour(props.route.params.colour);
+      setSlot(props.route.params.slot);
+      setSticker(props.route.params.sticker);
+      setVelg(props.route.params.rim);
+      setWiper(props.route.params.wiper);
+      setBody(props.route.params.body);
+      setLampu(props.route.params.lights);
+      setSpion(props.route.params.rearview_mirror);
+      setKaca(props.route.params.windshield);
+      setPintu(props.route.params.door);
+      setBanSerep(props.route.params.spare_tire);
+      setRemark(props.route.params.remarks);
+      setFileList('');
+    //  console.log('IMAGE',fileList[0].url);
+    }, [props]);
   
     const wait = (timeout) => {
       return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -135,8 +153,6 @@ import {
     };
 
   
-    const [fileList, setFileList] = useState([]);
-    const state = useMemo(() => ({ fileList }), [fileList]);
   
     const onSelectedImage = useCallback(
       (image) => {
@@ -178,14 +194,14 @@ import {
     }, []);
     
     const dataPass = {
-      check_id: dataprops.check_id,
+      check_id: props.route.params.check_id,
       entity_cd: '01',
       project_no: '01',
       userid : 'MGR',
-      tower_cd: dataprops.tower_cd,
-      location : dataprops.location,
-      check_date: dataprops.check_date,
-      plateno: dataprops.plateno,
+      tower_cd: props.route.params.tower_cd,
+      location : props.route.params.location,
+      check_date: props.route.params.check_date,
+      plateno: props.route.params.plateno,
   };
   
     const onSubmit = () => {
@@ -200,17 +216,17 @@ import {
       // const image = fileList[0].url.uri;
   
       const bodyData = new FormData();
-      bodyData.append('entity_cd', dataprops.entity_cd);
-      bodyData.append('project_no', dataprops.project_no);
-      bodyData.append('colour', dataprops.colour);
-      bodyData.append('audit_user', dataprops.audit_user);
-      bodyData.append('gate_cd', dataprops.gate_cd);
-      bodyData.append('name', dataprops.name);
-      bodyData.append('plateno', dataprops.plateno);
-      bodyData.append('slot', dataprops.slot);
-      bodyData.append('tower', dataprops.tower);
-      bodyData.append('type', dataprops.type);
-      bodyData.append('check_id', dataprops.check_id);
+      bodyData.append('entity_cd', props.route.params.entity_cd);
+      bodyData.append('project_no', props.route.params.project_no);
+      bodyData.append('colour', props.route.params.colour);
+      bodyData.append('audit_user', props.route.params.audit_user);
+      bodyData.append('gate_cd', props.route.params.gate_cd);
+      bodyData.append('name', props.route.params.name);
+      bodyData.append('plateno', props.route.params.plateno);
+      bodyData.append('slot', props.route.params.slot);
+      bodyData.append('tower', props.route.params.tower);
+      bodyData.append('type', props.route.params.type);
+      bodyData.append('check_id', props.route.params.check_id);
       bodyData.append('sticker', sticker);
       bodyData.append('velg', velg);
       bodyData.append('wiper', wiper);
@@ -221,7 +237,7 @@ import {
       bodyData.append('pintu', pintu);
       bodyData.append('banserep', banserep);
       bodyData.append('remark', remark);
-      bodyData.append('userid', dataprops.audit_user);
+      bodyData.append('userid', props.route.params.userid);
       bodyData.append('cnt', fileList.length);
       
       for(let i = 1; i <= fileList.length; i++){

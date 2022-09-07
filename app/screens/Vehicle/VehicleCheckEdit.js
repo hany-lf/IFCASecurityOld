@@ -265,7 +265,8 @@ import {
       plateno: props.route.params.plateno,
       tower_cd: props.route.params.tower_cd,
       location : props.route.params.location,
-      check_date: props.route.params.check_date
+      check_date: props.route.params.check_date,
+      status  : props.route.params.statusCheck,
      };
 
     
@@ -327,6 +328,7 @@ import {
             console.log('resJsonCallback', resJson);
             Alert.alert(resJson.Pesan);
             // navigation.navigate('Home');
+            console.log('dataPass',dataPass); //return;
             navigation.push('VehicleDetail', dataPass);
           });
         })
