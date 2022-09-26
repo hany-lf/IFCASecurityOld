@@ -473,7 +473,7 @@ const Package = (props) => {
     });
     bodyData.append('userid', 'MGR');
 
-    console.log('liatbody1', bodyData._parts[18]); console.log('liatbody2', bodyData._parts[17][1][0].url); return;
+    console.log('liatbody1', bodyData._parts[18]); console.log('liatbody2', bodyData._parts[17][1][0].url); //return;
     // return fetch('http://103.111.204.131/apiwebpbi/api/package/save', {
       return fetch(urlApi + 'package/save', {
       method: 'post',
