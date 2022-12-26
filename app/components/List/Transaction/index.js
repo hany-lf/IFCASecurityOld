@@ -51,12 +51,12 @@ const ListTransaction = ({
         <Text light style={styles.text}>
           Member Name
         </Text>
-        <Text footnote semibold style={[styles.text, { marginTop: 5 }]}>
+        <Text footnote semibold style={[styles.text, { marginTop: 5}]}>
           {tenant_name}
         </Text>
-        <Text footnote semibold style={[styles.text, { marginTop: 5 }]}>
+        {/* <Text footnote semibold style={[styles.text, { marginTop: 5 }]}>
           {other_tenant}
-        </Text>
+        </Text> */}
       </View>
     </TouchableOpacity>
   );

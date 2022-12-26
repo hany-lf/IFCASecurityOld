@@ -40,6 +40,7 @@ export default function PackageComplate({ route, navigation }) {
     received_date,
     deliveryman_name,
     deliveryman_hp,
+    sender_name
   } = itemId;
 
   // const itemprops = { ...passProp };
@@ -63,7 +64,9 @@ export default function PackageComplate({ route, navigation }) {
       <img src="https://api.qrserver.com/v1/create-qr-code/?data=${package_id}&amp;size=100x100" alt="" title="package_id" />
 
       <h3>Package ID = ${package_id}</h3>
-      <h4>Tenant Name  = ${tenant_name}</h4>
+      <h4>Name  = ${tenant_name}</h4>
+      <h4>Unit  = ${lot_no}</h4>
+      <h4>Sender Name  = ${sender_name}</h4>
       </div>`,
       fileName: `${package_id}`,
       base64: true,

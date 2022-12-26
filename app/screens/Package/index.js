@@ -379,8 +379,8 @@ const Package = (props) => {
     //   }
     // setValueGate(itemValue);
     // setValueTower(itemValue);
-
-    // fetchGate();
+// console.log('FILELIST',fileList[0].url)
+    fetchGate();
     if (!valueGate.trim()) {
       alert('Please enter Gate');
       return;
@@ -413,10 +413,10 @@ const Package = (props) => {
       alert('Please enter Type Packages');
       return;
     }
-    // if (!fileList.url) {
-    //   alert('Please enter Image');
-    //   return;
-    // }
+    if (!fileList[0].url) {
+      alert('Please enter Image');
+      return;
+    }
 
     const gate = valueGate;
     console.log('gate', gate);
@@ -465,18 +465,19 @@ const Package = (props) => {
     bodyData.append('package_type', type);
     bodyData.append('other_type', nameType);
     bodyData.append('package_qty', kuantity);
-    bodyData.append('userfile', fileList);
-    bodyData.append('userfile2', {
+    bodyData.append('cnt', fileList.length);
+    // bodyData.append('userfile', fileList);
+    bodyData.append('userfile', {
       uri: image,
       name: 'image.jpg',
       type: 'image/jpeg',
     });
     bodyData.append('userid', 'MGR');
 
-    console.log('liatbody1', bodyData._parts[18]); console.log('liatbody2', bodyData._parts[17][1][0].url); //return;
+    console.log('liatbody1', bodyData); //console.log('userfile', bodyData._parts[17][1][0]); return;
     // return fetch('http://103.111.204.131/apiwebpbi/api/package/save', {
       return fetch(urlApi + 'package/save', {
-      method: 'post',
+      method: 'POST',
       headers: {
         'Content-Type': 'multipart/form-data',
       },

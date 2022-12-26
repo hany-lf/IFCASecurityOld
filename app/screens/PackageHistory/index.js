@@ -29,6 +29,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import ListTransaction from '../../components/List/Transaction';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { urlApi } from "@config/services";
 
 function PackageHistory(props) {
   const { t } = useTranslation();
@@ -60,12 +61,13 @@ function PackageHistory(props) {
   useEffect(() => {
     async function fetchData() {
       // const URL = 'http://103.111.204.131/apiwebpbi/api/package/history/P';
-      const URL = 'http://34.87.121.155:8181/apiwebpbi/api/package/history/P';
+      const URL = urlApi + 'package/history/P';
 
       try {
         const res = await axios.get(URL);
         console.log('datahistor', res.data.data);
         setData(res.data.data);
+        console.log('tenantname',res.data.data[0].tenant_name.length)
       } catch (error) {
         console.log(error);
       }

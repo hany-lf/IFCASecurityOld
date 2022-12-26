@@ -7,6 +7,18 @@ import React, { useState, Fragment } from 'react';
 import { View, StyleSheet } from 'react-native';
 import styles from './styles';
 import { useTheme } from '@config';
+import { urlApi } from "@config/services";
+import { useNavigation, useRoute } from '@react-navigation/core';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import RNPrint from 'react-native-print';
+import QRCode from 'react-native-qrcode-svg';
+import {
+  TextInput,
+  Header,
+  SafeAreaView,
+  Icon,
+  Button,
+} from '@components';
 
 const TransactionExpand = ({
   style = {},
@@ -76,6 +88,53 @@ const TransactionExpand = ({
 }) => {
   const { colors } = useTheme();
   const [isExpand, setIsExpand] = useState(isExpandInit);
+  const navigation = useNavigation(); 
+
+  const printPDF = async () => {
+    const result = await RNHTMLtoPDF.convert({
+      html: `
+      <div style="text-align:center; justify-content:center;">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?data=${package_id}&amp;size=100x100" alt="" title="package_id" />
+
+      <h3>Package ID = ${package_id}</h3>
+      <h4>Name  = ${tenant_name}</h4>
+      <h4>Unit  = ${lot_no}</h4>
+      <h4>Sender Name  = ${sender_name}</h4>
+      </div>`,
+      fileName: `${package_id}`,
+      base64: true,
+    });
+    await RNPrint.print({ filePath: result.filePath });
+  };
+
+  const onSubmit = (itemValue) => {
+ 
+    const bodyData = new FormData();
+    bodyData.append('entity_cd', '01');
+    bodyData.append('project_no', '01');
+    bodyData.append('userid', 'MGR');
+    bodyData.append('package_id', package_id);
+
+    console.log('liatbody1', bodyData); //console.log('userfile', bodyData._parts[17][1][0]); return;
+    // return fetch('http://103.111.204.131/apiwebpbi/api/package/save', {
+      return fetch(urlApi + 'package/printPDF', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: bodyData,
+    })
+      .then((res) => {
+        return res.json().then((resJson) => {
+          console.log('resJsonCallback', resJson);
+          // Alert.alert(resJson.Pesan);
+          navigation.navigate('PackageComplate', resJson.Data);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <View style={style}>
@@ -207,6 +266,26 @@ const TransactionExpand = ({
               <Text footnote semibold>
                 {sender_hp}
               </Text>
+            </View>
+          </View>
+          <View style={[styles.container, style, {justifyContent: 'center'}]}>
+            <View style={{ padding: 5 }}>
+              <Button
+                icon={
+                  <Icon
+                    name='plus'
+                    color={colors.primary}
+                    style={{ marginRight: 5 }}
+                  />
+                }
+                outline
+                style={{
+                  marginHorizontal: 10,
+                  backgroundColor: colors.background,
+                }}
+                onPress={printPDF}>
+                {('Print to save')}
+              </Button>
             </View>
           </View>
         </View>
